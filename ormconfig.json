@@ -5,7 +5,7 @@
     "username": "root",
     "password": "",
     "database": "kms_316",
-    "synchronize": true,
+    "synchronize": false,
     "logging": false,
     "entities": [
        "src/entity/**/*.ts"

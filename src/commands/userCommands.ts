@@ -10,7 +10,7 @@ import config = require("../config.json");
 
 @Discord(config.commandPrefix)
 @Description("All User commands handlers.")
-abstract class UserCommands {
+export abstract class UserCommands {
 
     @Command("help")
     private handleHelp(message: CommandMessage) {
