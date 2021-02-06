@@ -7,7 +7,13 @@ import {
 import { Client } from "@typeit/discord";
 import { MessageEmbed } from "discord.js";
 import config = require("../config.json");
-import { getOnlinePlayersAmount } from "../database"
+import jobs = require("../jobs.json");
+import { getOnlinePlayersAmount, getCharacterByName } from "../database"
+
+
+function numberWithCommas(x: number) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 @Discord(config.commandPrefix)
 @Description("All User commands handlers.")
@@ -64,8 +70,7 @@ export abstract class UserCommands {
 
     @Command("online")
     private handleOnline(message: CommandMessage) {
-
-        let playersOnline = getOnlinePlayersAmount().then((value) => {
+        var promise = getOnlinePlayersAmount().then((value) => {
 
             let isPlural = (value > 1) ? "players" : "player";
         
@@ -78,6 +83,39 @@ export abstract class UserCommands {
     
             message.channel.send(messageEmbed);
         });
+    }
 
+    @Command("character")
+    private handleCharacter(message: CommandMessage) {
+        let args = message.content.split(" ");
+        if(args.length < 2) {
+            message.channel.send("Please provide a character name! !character <name>");
+            return;
+        }
+        
+        let name = args[1];
+
+        var promise = getCharacterByName(name).then((character) => {
+            if(character == null) {
+                message.channel.send("Character does not exist.")
+                return;
+            }
+            
+            const messageEmbed = new MessageEmbed()
+            .setTitle("Character Info")
+            .setColor(0x00FF00)
+            .setDescription(`${character.name}'s Info/Stats`)
+            .setThumbnail(config.serverImg)
+            .setFooter(config.serverName);
+
+            messageEmbed.addField("IGN", character.name, true);
+            messageEmbed.addField("Fame", character.fame, true);
+            messageEmbed.addField("Level", character.level, true);
+            messageEmbed.addField("Mesos", numberWithCommas(character.meso), true);
+            messageEmbed.addField("Job", jobs[character.job], true);
+
+            message.channel.send(messageEmbed);
+
+        });
     }
 }
