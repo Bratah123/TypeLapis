@@ -19,6 +19,7 @@ abstract class UserCommands {
         const messageEmbed = new MessageEmbed()
         .setTitle("Commands")
         .setColor(0x0000ff)
+        .setThumbnail(config.serverImg)
         .setDescription(`All bot commands for ${config.serverName}`);
 
         for(let index in commands) {
