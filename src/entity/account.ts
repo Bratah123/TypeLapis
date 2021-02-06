@@ -1,5 +1,6 @@
 // This Account Entity represents an Azure Account in Database
-import { Column, Entity, PrimaryGeneratedColumn, TableColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, TableColumn, createConnection } from "typeorm";
+import ormconfig = require("../../ormconfig.json")
 
 @Entity({name: "accounts"})
 export class Account {
@@ -108,5 +109,33 @@ export class Account {
 
     @Column({name: "blockgamedays"})
     blockGameDays: number;
+
+    public addDp(amount: number) {
+        this.donationPoints += amount;
+    }
+
+    public save() {
+        createConnection({
+            type: "mysql",
+            host: ormconfig.host,
+            port: 3306,
+            username: ormconfig.username,
+            password: ormconfig.password,
+            database: ormconfig.database,
+            entities: [
+                Account
+            ],
+            synchronize: ormconfig.synchronize,
+            logging: false
+        })
+        .then(async connection => {
+            let accountRepo = connection.getRepository(Account);
+            await accountRepo.save(this);
+            await connection.close();
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
 
 }
