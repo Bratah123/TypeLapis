@@ -1,6 +1,7 @@
 // This class represents an Azure Character in Database
 
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, createConnection } from "typeorm";
+import ormconfig = require("../../ormconfig.json");
 
 @Entity({name: "characters"})
 export class Character {
@@ -25,5 +26,33 @@ export class Character {
 
     @Column()
     fame: number;
+
+    public addMesos(amount: number) {
+        this.meso += amount;
+    }
+
+    public save() {
+        createConnection({
+            type: "mysql",
+            host: ormconfig.host,
+            port: 3306,
+            username: ormconfig.username,
+            password: ormconfig.password,
+            database: ormconfig.database,
+            entities: [
+                Character
+            ],
+            synchronize: ormconfig.synchronize,
+            logging: false
+        })
+        .then(async connection => {
+            let accountRepo = connection.getRepository(Character);
+            await accountRepo.save(this);
+            await connection.close();
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
 
 }
