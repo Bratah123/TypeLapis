@@ -7,6 +7,7 @@ import {
 import { Client } from "@typeit/discord";
 import { MessageEmbed } from "discord.js";
 import config = require("../config.json");
+import { getOnlinePlayersAmount } from "../database"
 
 @Discord(config.commandPrefix)
 @Description("All User commands handlers.")
@@ -59,5 +60,24 @@ export abstract class UserCommands {
         messageEmbed.setFooter(config.serverName);
 
         message.channel.send(messageEmbed);
+    }
+
+    @Command("online")
+    private handleOnline(message: CommandMessage) {
+
+        let playersOnline = getOnlinePlayersAmount().then((value) => {
+
+            let isPlural = (value > 1) ? "players" : "player";
+        
+            const messageEmbed = new MessageEmbed()
+            .setTitle("Players Online")
+            .setDescription(`${value} ${isPlural} online.`)
+            .setColor(0x000FF00)
+            .setThumbnail(config.serverImg)
+            .setFooter(config.serverName);
+    
+            message.channel.send(messageEmbed);
+        });
+
     }
 }

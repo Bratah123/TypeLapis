@@ -1,9 +1,14 @@
-import { createConnection } from "typeorm";
+import { createConnection, getConnection } from "typeorm";
 import ormconfig = require("../ormconfig.json");
 import { Account } from "./entity/account";
+export { getOnlinePlayersAmount, getAccountByName }
+
+
+// All these functions return promises
 
 function getAccountByName(username: string) {
-    createConnection({
+
+    return createConnection({
         type: "mysql",
         host: ormconfig.host,
         port: 3306,
@@ -21,8 +26,6 @@ function getAccountByName(username: string) {
         .createQueryBuilder("accounts")
         .where("name = :name", {name: username})
         .getOne();
-        connection.close()
-
         return account;
 
     })
@@ -30,6 +33,33 @@ function getAccountByName(username: string) {
         console.log(error);
         return null;
     });
+}
 
-    return null;
+function getOnlinePlayersAmount() {
+
+    return createConnection({
+        type: "mysql",
+        host: ormconfig.host,
+        port: 3306,
+        username: ormconfig.username,
+        password: ormconfig.password,
+        database: ormconfig.database,
+        entities: [
+            Account
+        ],
+        synchronize: ormconfig.synchronize,
+        logging: false
+    })
+    .then(async connection => {
+        const amount = await connection.getRepository(Account)
+        .createQueryBuilder("accounts")
+        .where("loggedin > 0")
+        .getCount();
+        return amount;
+    })
+    .catch(error => {
+        console.log(error);
+        return 0;
+    });
+
 }
