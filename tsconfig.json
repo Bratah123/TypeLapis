@@ -16,7 +16,8 @@
     "moduleResolution": "node",
     "types": [
       "node"
-    ]
+    ],
+    "resolveJsonModule": true
   },
   "exclude": [
     "node_modules",
