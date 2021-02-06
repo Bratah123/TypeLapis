@@ -29,7 +29,7 @@ abstract class UserCommands {
             commandString += description + "\n";
         }
 
-        messageEmbed.addField("Player Commands", commandString, false);
+        messageEmbed.addField("Bot Commands", commandString, false);
 
         message.channel.send(messageEmbed);
     }

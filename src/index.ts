@@ -11,7 +11,6 @@ async function start() {
         variablesChar: ":"
     });
 
-
     await client.login(config.botToken);
 }
 
