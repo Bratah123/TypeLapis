@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { Client } from "@typeit/discord";
-import config = require("./config.json")
+import config = require("./config.json");
 
 async function start() {
     const client = new Client({
