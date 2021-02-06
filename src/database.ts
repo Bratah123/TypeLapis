@@ -12,7 +12,7 @@ function getAccountById(id: number) {
     return createConnection({
         type: "mysql",
         host: ormconfig.host,
-        port: 3306,
+        port: ormconfig.port,
         username: ormconfig.username,
         password: ormconfig.password,
         database: ormconfig.database,
@@ -42,7 +42,7 @@ function getOnlinePlayersAmount() {
     return createConnection({
         type: "mysql",
         host: ormconfig.host,
-        port: 3306,
+        port: ormconfig.port,
         username: ormconfig.username,
         password: ormconfig.password,
         database: ormconfig.database,
@@ -72,7 +72,7 @@ function getCharacterByName(name: string) {
     return createConnection({
         type: "mysql",
         host: ormconfig.host,
-        port: 3306,
+        port: ormconfig.port,
         username: ormconfig.username,
         password: ormconfig.password,
         database: ormconfig.database,
@@ -100,7 +100,7 @@ function getAccountByCharName(ign: string) {
     return createConnection({
         type: "mysql",
         host: ormconfig.host,
-        port: 3306,
+        port: ormconfig.port,
         username: ormconfig.username,
         password: ormconfig.password,
         database: ormconfig.database,

@@ -118,7 +118,7 @@ export class Account {
         createConnection({
             type: "mysql",
             host: ormconfig.host,
-            port: 3306,
+            port: ormconfig.port,
             username: ormconfig.username,
             password: ormconfig.password,
             database: ormconfig.database,
